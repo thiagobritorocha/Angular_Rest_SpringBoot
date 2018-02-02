@@ -2,11 +2,8 @@ package com.algamoney.api.resource;
 
 import java.net.URI;
 import java.util.List;
-
 import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
 import com.algamoney.api.model.Categoria;
-import com.algamoney.api.repository.CategoriaRepository;
 import com.algamoney.api.services.CategoriaService;
 
 @RestController
@@ -28,6 +25,7 @@ public class CategoriaResource {
 
 	@Autowired
 	private CategoriaService categoriaService;
+
 
 	@GetMapping
 	public ResponseEntity<List<Categoria>> listar() {
@@ -46,13 +44,11 @@ public class CategoriaResource {
 		
 		//return ResponseEntity.created(uri).body(categoriaSalva);
 		return ResponseEntity.created(uri).build();
-		
 	}
 
 	@GetMapping("/{codigo}")
 	public ResponseEntity<?> buscar(@PathVariable Long codigo) {
 		return ResponseEntity.status(HttpStatus.OK).body(categoriaService.buscar(codigo));
-		
 	}
 	
 	@PutMapping("/{codigo}")
@@ -69,5 +65,4 @@ public class CategoriaResource {
 		
 		 return ResponseEntity.noContent().build();
 	}
-
 }
