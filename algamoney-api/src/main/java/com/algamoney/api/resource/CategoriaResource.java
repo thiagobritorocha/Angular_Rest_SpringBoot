@@ -3,6 +3,8 @@ package com.algamoney.api.resource;
 import java.net.URI;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,23 +28,22 @@ public class CategoriaResource {
 	@Autowired
 	private CategoriaService categoriaService;
 
-
 	@GetMapping
 	public ResponseEntity<List<Categoria>> listar() {
 		return ResponseEntity.status(HttpStatus.CREATED).body(categoriaService.listar());
 	}
 
 	@PostMapping
-	public ResponseEntity<?> salvar(@RequestBody Categoria categoria) {
-	//public ResponseEntity<?> criar(@RequestBody Categoria categoria, HttpServletResponse response) {
+	public ResponseEntity<?> salvar(@Valid @RequestBody Categoria categoria) {
+		// public ResponseEntity<?> criar(@RequestBody Categoria categoria,
+		// HttpServletResponse response) {
 		Categoria categoriaSalva = categoriaService.salvar(categoria);
 
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{codigo}")
-				.buildAndExpand(categoriaSalva.getCodigo()).toUri();
+									.buildAndExpand(categoriaSalva.getCodigo()).toUri();
 
-		//response.setHeader("Location", uri.toASCIIString());
-		
-		//return ResponseEntity.created(uri).body(categoriaSalva);
+		// response.setHeader("Location", uri.toASCIIString());
+		// return ResponseEntity.created(uri).body(categoriaSalva);
 		return ResponseEntity.created(uri).build();
 	}
 
@@ -50,19 +51,17 @@ public class CategoriaResource {
 	public ResponseEntity<?> buscar(@PathVariable Long codigo) {
 		return ResponseEntity.status(HttpStatus.OK).body(categoriaService.buscar(codigo));
 	}
-	
+
 	@PutMapping("/{codigo}")
 	public ResponseEntity<Void> atualizar(@RequestBody Categoria categoria, @PathVariable Long codigo, HttpServletResponse response) {
 		categoria.setCodigo(codigo);
 		categoriaService.atualizar(categoria);
 		return ResponseEntity.noContent().build();
-	}	
-	
+	}
+
 	@DeleteMapping("/{codigo}")
-	public ResponseEntity<Void> deletar(@PathVariable Long codigo){
-		
+	public ResponseEntity<Void> deletar(@PathVariable Long codigo) {
 		categoriaService.deletar(codigo);
-		
-		 return ResponseEntity.noContent().build();
+		return ResponseEntity.noContent().build();
 	}
 }

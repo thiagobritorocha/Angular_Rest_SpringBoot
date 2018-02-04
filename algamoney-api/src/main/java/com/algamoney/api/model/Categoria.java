@@ -5,6 +5,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -18,6 +20,8 @@ public class Categoria {
 	private Long codigo;
 	
 	@JsonInclude(Include.NON_NULL)
+	@NotNull
+	@Size(min=3, max=20)
 	private String nome;
 	
 	public Long getCodigo() {
