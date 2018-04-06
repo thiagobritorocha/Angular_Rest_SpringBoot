@@ -23,7 +23,8 @@ public class PessoaService {
 	public Pessoa buscar(Long codigo){
 		Pessoa pessoa = pessoaReposiroty.findOne(codigo);
 		if(pessoa == null){
-			throw new PessoaNaoEncontradaException("A pessoa não pode ser encontrada");	
+			//throw new PessoaNaoEncontradaException("A pessoa não pode ser encontrada");	
+			throw new EmptyResultDataAccessException(1);
 		}
 		return pessoa;
 	}
