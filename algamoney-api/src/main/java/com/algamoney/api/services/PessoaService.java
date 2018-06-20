@@ -1,11 +1,11 @@
 package com.algamoney.api.services;
 
 import java.util.List;
-
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
 import com.algamoney.api.model.Pessoa;
 import com.algamoney.api.repository.PessoaRepository;
 import com.algamoney.api.services.exceptions.PessoaNaoEncontradaException;
@@ -23,7 +23,6 @@ public class PessoaService {
 	public Pessoa buscar(Long codigo){
 		Pessoa pessoa = pessoaReposiroty.findOne(codigo);
 		if(pessoa == null){
-			//throw new PessoaNaoEncontradaException("A pessoa não pode ser encontrada");	
 			throw new EmptyResultDataAccessException(1);
 		}
 		return pessoa;
@@ -42,12 +41,16 @@ public class PessoaService {
 		}
 	}
 	
-	public void atualizar(Pessoa pessoa){
-		verificarExistencia(pessoa);
-		pessoaReposiroty.save(pessoa);
+	public Pessoa atualizar(Pessoa pessoa, Long codigo){
+		Pessoa pessoaSalva = buscar(codigo);
+		BeanUtils.copyProperties(pessoa, pessoaSalva, "codigo");
+		pessoaReposiroty.save(pessoaSalva);
+		return pessoaSalva;
 	}
-	
-	private void verificarExistencia(Pessoa pessoa){
-		buscar(pessoa.getCodigo());	
+
+	public void atualizarPropriedadeAtivo(Long codigo, Boolean ativo) {
+		Pessoa pessoaSalva = buscar(codigo);
+		pessoaSalva.setAtivo(ativo);
+		pessoaReposiroty.save(pessoaSalva);
 	}
-}
+}	

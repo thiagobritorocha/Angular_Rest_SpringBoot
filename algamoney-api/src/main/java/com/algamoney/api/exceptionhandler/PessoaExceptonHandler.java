@@ -36,7 +36,7 @@ public class PessoaExceptonHandler extends ResponseEntityExceptionHandler{
 	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
 		String mensagemUsuario = messageSource.getMessage("mensagem.invalida", null, LocaleContextHolder.getLocale());
-		String mensagemDesenvolvedor = ex.getCause().toString();
+		String mensagemDesenvolvedor = ex.getCause() != null ? ex.getCause().toString() : ex.toString();
 		
 		List<Erro> erros = Arrays.asList(new Erro(mensagemUsuario, mensagemDesenvolvedor));
 		return handleExceptionInternal(ex, erros, headers, status, request);
@@ -63,7 +63,7 @@ public class PessoaExceptonHandler extends ResponseEntityExceptionHandler{
 	//EXCEPTION LANÇADA QUANDO A PESSOA NÃO É ENCONTRADA
 	//TRATAMENTO QUE É FEITO QUANDO É LANÇADA UMA EXCEPTION PessoaNaoEncontradaException
 	@ExceptionHandler(PessoaNaoEncontradaException.class) 
-	public ResponseEntity<DetalhesErro> handlerCategoriaNaoEncontrada
+	public ResponseEntity<DetalhesErro> handlerPessoaNaoEncontrada
 												 (PessoaNaoEncontradaException e, HttpServletRequest request){
 		DetalhesErro detalheErro = new DetalhesErro();
 		detalheErro.setTitulo("A Pessoa não pode ser Encontrada");

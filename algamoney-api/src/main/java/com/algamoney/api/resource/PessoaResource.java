@@ -37,7 +37,6 @@ public class PessoaResource {
 		return ResponseEntity.status(HttpStatus.CREATED).body(pessoaService.listar());
 	}
 
-	// public ResponseEntity<?> salvar(@Valid @RequestBody Pessoa pessoa) {
 	@PostMapping
 	public ResponseEntity<?> criar(@RequestBody Pessoa pessoa, HttpServletResponse response) {
 		Pessoa pessoaSalva = pessoaService.salvar(pessoa);
@@ -45,8 +44,6 @@ public class PessoaResource {
 		publisher.publishEvent(new RecursoCriadoEvent(this, response, pessoaSalva.getCodigo()));
 
 		return ResponseEntity.status(HttpStatus.CREATED).body(pessoaSalva);
-		// return ResponseEntity.created(uri).body(pessoaSalva);
-		// return ResponseEntity.created(uri).build();
 	}
 
 	@GetMapping("/{codigo}")
@@ -55,16 +52,20 @@ public class PessoaResource {
 	}
 
 	@PutMapping("/{codigo}")
-	public ResponseEntity<Pessoa> atualizar(@Valid @RequestBody Pessoa pessoa, @PathVariable Long codigo,
-			HttpServletResponse response) {
-		pessoa.setCodigo(codigo);
-		pessoaService.atualizar(pessoa);
-		return ResponseEntity.noContent().build();
+	public ResponseEntity<Pessoa> atualizar(@Valid @RequestBody Pessoa pessoa, @PathVariable Long codigo) {
+		Pessoa pessoaSalva = pessoaService.atualizar(pessoa, codigo);
+		return ResponseEntity.ok(pessoaSalva);
 	}
 
 	@DeleteMapping("/{codigo}")
 	public ResponseEntity<Void> deletar(@PathVariable Long codigo) {
 		pessoaService.deletar(codigo);
+		return ResponseEntity.noContent().build();
+	}
+	
+	@PutMapping("/{codigo}/ativo")
+	public ResponseEntity<Pessoa> atualizarPropriedadeAtivo(@PathVariable Long codigo, @RequestBody Boolean ativo) {
+		pessoaService.atualizarPropriedadeAtivo(codigo, ativo);
 		return ResponseEntity.noContent().build();
 	}
 }
