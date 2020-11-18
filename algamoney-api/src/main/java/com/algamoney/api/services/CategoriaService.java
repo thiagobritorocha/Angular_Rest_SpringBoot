@@ -1,6 +1,7 @@
 package com.algamoney.api.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -21,11 +22,11 @@ public class CategoriaService {
 	}
 	
 	public Categoria buscar(Long codigo){
-		Categoria categoria = categoriaReposiroty.findOne(codigo);
+		Optional<Categoria> categoria = categoriaReposiroty.findById(codigo);
 		if(categoria == null){
 			throw new CategoriaNaoEncontradaException("A categoria não pode ser encontrada");	
 		}
-		return categoria;
+		return categoria.get();
 	}
 	
 	public Categoria salvar(Categoria categoria){
@@ -35,7 +36,7 @@ public class CategoriaService {
 	
 	public void deletar(Long codigo){
 		try {
-			categoriaReposiroty.delete(codigo);
+			categoriaReposiroty.deleteById(codigo);
 		} catch (EmptyResultDataAccessException e) {
 			throw new CategoriaNaoEncontradaException("A categoria não pode ser encontrada");
 		}

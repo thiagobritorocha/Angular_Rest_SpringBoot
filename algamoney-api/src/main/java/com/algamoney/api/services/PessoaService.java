@@ -1,6 +1,8 @@
 package com.algamoney.api.services;
 
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -21,11 +23,11 @@ public class PessoaService {
 	}
 	
 	public Pessoa buscar(Long codigo){
-		Pessoa pessoa = pessoaReposiroty.findOne(codigo);
+		Optional<Pessoa> pessoa = pessoaReposiroty.findById(codigo);
 		if(pessoa == null){
 			throw new EmptyResultDataAccessException(1);
 		}
-		return pessoa;
+		return pessoa.get();
 	}
 	
 	public Pessoa salvar(Pessoa pessoa){
@@ -35,7 +37,7 @@ public class PessoaService {
 	
 	public void deletar(Long codigo){
 		try {
-			pessoaReposiroty.delete(codigo);
+			pessoaReposiroty.deleteById(codigo);
 		} catch (EmptyResultDataAccessException e) {
 			throw new PessoaNaoEncontradaException("A pessoa não pode ser encontrada");
 		}
